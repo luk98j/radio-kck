@@ -1,0 +1,34 @@
+#backgroundPane {
+    -fx-background-color: black;
+    -fx-background-radius: 15;
+    -fx-border-radius: 10;
+}
+#mainPane {
+    -fx-background-color: #1a1a1a;
+    -fx-background-radius: 15;
+    -fx-border-radius: 10;
+}
+#switchOn {
+    -fx-background-image: url('/sample/assets/b1.jpg');
+    -fx-background-color: black;
+    -fx-border-bottom-right-radius: 15;
+    -fx-border-top-right-radius: 15;
+}
+#switchOn:pressed {
+    -fx-background-color: white;
+    -fx-border-bottom-right-radius: 15;
+    -fx-border-top-right-radius: 15;
+}
+.button {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+.button:pressed {
+    -fx-background-color: gray;
+    -fx-text-fill: white;
+}
+
+#screenLCD {
+    -fx-background-color: black;
+    -fx-text-fill: red;
+}
