@@ -6,26 +6,25 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="191.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/16"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="backgroundPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="191.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <AnchorPane id="mainPane" layoutX="15.0" layoutY="19.0" prefHeight="155.0" prefWidth="523.0">
+      <AnchorPane fx:id="mainPane" layoutX="15.0" layoutY="19.0" prefHeight="155.0" prefWidth="523.0">
          <children>
-            <Button id="switchOn" layoutY="58.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="39.0" />
-            <Button layoutX="268.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="1" />
-            <Button layoutX="315.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="2" />
-            <Button layoutX="363.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="3" />
-            <Button layoutX="414.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="4" />
-            <Button layoutX="463.0" layoutY="129.0" mnemonicParsing="false" text="FAV" />
-            <Button layoutX="224.0" layoutY="129.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" />
-            <TextField id="screenLCD" layoutX="168.0" layoutY="36.0" prefHeight="55.0" prefWidth="333.0" />
-            <ImageView id="knob" fitHeight="69.0" fitWidth="69.0" layoutX="62.0" layoutY="41.0" onRotate="#rotation" pickOnBounds="true" preserveRatio="true">
+            <Button fx:id="switchOn" layoutY="58.0" mnemonicParsing="false" onAction="#changeRadioState" prefHeight="40.0" prefWidth="39.0" />
+            <Button fx:id="buttonChannelOne" layoutX="268.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="1" />
+            <Button fx:id="buttonChannelTwo" layoutX="315.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="2" />
+            <Button fx:id="buttonChannelThree" layoutX="363.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="3" />
+            <Button fx:id="buttonChannelFour" layoutX="414.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="4" />
+            <Button fx:id="buttonFavourite" layoutX="463.0" layoutY="129.0" mnemonicParsing="false" text="FAV" />
+            <Button fx:id="buttonRDS" layoutX="224.0" layoutY="129.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="RDS" />
+            <TextField fx:id="screenLCD" layoutX="168.0" layoutY="36.0" prefHeight="55.0" prefWidth="333.0" />
+            <ImageView fx:id="knob" fitHeight="69.0" fitWidth="69.0" layoutX="62.0" layoutY="41.0" onRotate="#rotation" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@assets/b2.png" />
                </image>
             </ImageView>
-            <Button layoutX="62.0" layoutY="129.0" mnemonicParsing="false" text="&lt;&lt;" />
-            <Button layoutX="98.0" layoutY="129.0" mnemonicParsing="false" text="&gt;&gt;" />
+            <Button fx:id="frequencyDown" layoutX="62.0" layoutY="129.0" mnemonicParsing="false" text="&lt;&lt;" />
+            <Button fx:id="frequencyUp" layoutX="98.0" layoutY="129.0" mnemonicParsing="false" text="&gt;&gt;" />
          </children>
       </AnchorPane>
    </children>
