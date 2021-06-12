@@ -15,7 +15,7 @@
             <Button fx:id="buttonChannelTwo" layoutX="315.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="2" />
             <Button fx:id="buttonChannelThree" layoutX="363.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="3" />
             <Button fx:id="buttonChannelFour" layoutX="414.0" layoutY="129.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="39.0" text="4" />
-            <Button fx:id="buttonFavourite" layoutX="463.0" layoutY="129.0" mnemonicParsing="false" text="FAV" />
+            <Button fx:id="buttonFavourite" layoutX="463.0" layoutY="129.0" mnemonicParsing="false" onAction="#addFavStation" text="FAV" />
             <Button fx:id="buttonRDS" layoutX="224.0" layoutY="129.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="RDS" />
             <TextField fx:id="screenLCD" layoutX="168.0" layoutY="36.0" prefHeight="55.0" prefWidth="333.0" />
             <ImageView fx:id="knob" fitHeight="69.0" fitWidth="69.0" layoutX="62.0" layoutY="41.0" onRotate="#rotation" pickOnBounds="true" preserveRatio="true">
@@ -23,8 +23,8 @@
                   <Image url="@assets/b2.png" />
                </image>
             </ImageView>
-            <Button fx:id="frequencyDown" layoutX="62.0" layoutY="129.0" mnemonicParsing="false" text="&lt;&lt;" />
-            <Button fx:id="frequencyUp" layoutX="98.0" layoutY="129.0" mnemonicParsing="false" text="&gt;&gt;" />
+            <Button fx:id="frequencyDown" layoutX="62.0" layoutY="129.0" mnemonicParsing="false" onAction="#setFrequencyDown" text="&lt;&lt;" />
+            <Button fx:id="frequencyUp" layoutX="98.0" layoutY="129.0" mnemonicParsing="false" onAction="#setFrequencyUp" text="&gt;&gt;" />
          </children>
       </AnchorPane>
    </children>
