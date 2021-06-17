@@ -14,6 +14,8 @@ import javafx.util.Duration;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -43,7 +45,7 @@ public class Controller implements Initializable {
 
     private RadioChannels radioChannels;
     private Radio radio;
-    private Rotate rotation = new Rotate();
+    private final Rotate rotation = new Rotate();
     private static final double pivotX = 35;
     private static final double pivotY = 35;
     private boolean statusAddStations = false;
@@ -52,16 +54,15 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         radioChannels = new RadioChannels();
         radio = new Radio(false);
-        rotation.setPivotX(pivotX);
-        rotation.setPivotY(pivotY);
-        rotation.setAngle(150);
-        knob.getTransforms().addAll(rotation);
-
+        setKnobAndPivot();
+        List<Button> buttonList = new ArrayList<>();
+        buttonList.add(buttonChannelOne);
         buttonChannelOne.setOnAction(event -> {
             if (statusAddStations) {
                 radio.setFirstStation(radio.getActualFrequency());
-                setActualTextOnLCD("Correctly written");
-                statusAddStations = false;
+                if(radio.getFirstStation() == radio.getActualFrequency()) {
+                    actionAfterSaving();
+                }
             } else {
                 if(radio.isTurnedOn()) {
                     setFavStation(radioChannels.playMusic(radio.getFirstStation()));
@@ -71,8 +72,9 @@ public class Controller implements Initializable {
         buttonChannelTwo.setOnAction(event -> {
             if (statusAddStations) {
                 radio.setSecondStation(radio.getActualFrequency());
-                setActualTextOnLCD("Correctly written");
-                statusAddStations = false;
+                if(radio.getSecondStation() == radio.getActualFrequency()) {
+                    actionAfterSaving();
+                }
             } else {
                 if(radio.isTurnedOn()) {
                     setFavStation(radioChannels.playMusic(radio.getSecondStation()));
@@ -82,8 +84,9 @@ public class Controller implements Initializable {
         buttonChannelThree.setOnAction(event -> {
             if (statusAddStations) {
                 radio.setThirdStation(radio.getActualFrequency());
-                setActualTextOnLCD("Correctly written");
-                statusAddStations = false;
+                if(radio.getThirdStation() == radio.getActualFrequency()) {
+                    actionAfterSaving();
+                }
             } else {
                 if(radio.isTurnedOn()) {
                     setFavStation(radioChannels.playMusic(radio.getThirdStation()));
@@ -93,14 +96,16 @@ public class Controller implements Initializable {
         buttonChannelFour.setOnAction(event -> {
             if (statusAddStations) {
                 radio.setFourthStation(radio.getActualFrequency());
-                setActualTextOnLCD("Correctly written");
-                statusAddStations = false;
+                if(radio.getFourthStation() == radio.getActualFrequency()) {
+                    actionAfterSaving();
+                }
             } else {
                 if(radio.isTurnedOn()) {
                     setFavStation(radioChannels.playMusic(radio.getFourthStation()));
                 }
             }
         });
+
         buttonRDS.setOnAction(event -> {
             if(radio.isTurnedOn()){
                 Map.Entry<String, Double> station = radioChannels.findNearestStation(radio.getActualFrequency());
@@ -109,16 +114,17 @@ public class Controller implements Initializable {
             }
         });
     }
+
     public void rotation(MouseEvent event) {
         if (event.getButton().equals(MouseButton.PRIMARY)) {
             if(rotation.getAngle() != 300.0) {
                 radioChannels.volumeUp();
-                rotation.setAngle(rotation.getAngle() + 15);
+                rotation.setAngle(rotation.getAngle() + 30);
             }
         } else if (event.getButton().equals(MouseButton.SECONDARY)) {
             if(rotation.getAngle() != 0.0) {
                 radioChannels.volumeDown();
-                rotation.setAngle(rotation.getAngle() - 15);
+                rotation.setAngle(rotation.getAngle() - 30);
             }
         }
     }
@@ -133,14 +139,13 @@ public class Controller implements Initializable {
             radio.setTurnedOn(true);
             setActualTextOnLCD("TURN ON");
             openActualChannel();
-
         }
     }
 
 
     public void setFrequencyUp(){
         if(radio.isTurnedOn()) {
-            BigDecimal bd = new BigDecimal(Double.sum(radio.getActualFrequency(), 0.1)).setScale(1, RoundingMode.HALF_EVEN);
+            BigDecimal bd = BigDecimal.valueOf(Double.sum(radio.getActualFrequency(), 0.1)).setScale(1, RoundingMode.HALF_EVEN);
             radio.setActualFrequency(bd.doubleValue());
             setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
             checkStation();
@@ -149,7 +154,7 @@ public class Controller implements Initializable {
 
     public void setFrequencyDown(){
         if(radio.isTurnedOn()) {
-            BigDecimal bd = new BigDecimal(radio.getActualFrequency() - 0.1).setScale(1, RoundingMode.HALF_EVEN);
+            BigDecimal bd = BigDecimal.valueOf(radio.getActualFrequency() - 0.1).setScale(1, RoundingMode.HALF_EVEN);
             radio.setActualFrequency(bd.doubleValue());
             setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
             checkStation();
@@ -159,10 +164,7 @@ public class Controller implements Initializable {
     public void addFavStation(){
         if(radio.isTurnedOn()) {
             statusAddStations = true;
-            String tempText = screenLCD.getText();
-            System.out.println(tempText);
-            actionOnDelay("Store stations", 1);
-            setActualTextOnLCD(tempText);
+            actionOnDelay("Store stations",1);
         }
     }
 
@@ -196,5 +198,17 @@ public class Controller implements Initializable {
         PauseTransition pause = new PauseTransition(Duration.seconds(delay));
         pause.setOnFinished(event -> setActualTextOnLCD(text));
         pause.play();
+    }
+
+    private void setKnobAndPivot(){
+        rotation.setPivotX(pivotX);
+        rotation.setPivotY(pivotY);
+        rotation.setAngle(150);
+        knob.getTransforms().addAll(rotation);
+    }
+
+    private void actionAfterSaving(){
+        setActualTextOnLCD("Correctly written");
+        statusAddStations = false;
     }
 }
