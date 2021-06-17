@@ -55,8 +55,6 @@ public class Controller implements Initializable {
         radioChannels = new RadioChannels();
         radio = new Radio(false);
         setKnobAndPivot();
-        List<Button> buttonList = new ArrayList<>();
-        buttonList.add(buttonChannelOne);
         buttonChannelOne.setOnAction(event -> {
             if (statusAddStations) {
                 radio.setFirstStation(radio.getActualFrequency());
