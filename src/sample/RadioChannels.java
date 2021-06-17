@@ -188,10 +188,11 @@ public class RadioChannels {
         }
     }
 
-    public void findNearestStation(double frequency){
+    public Map.Entry<String, Double> findNearestStation(double frequency){
         Map.Entry<String, Double> station = stationsMap.entrySet().stream()
                 .min(Comparator.comparingDouble(i -> Math.abs(i.getValue() - frequency)))
                 .orElseThrow(()-> new NoSuchElementException("No station"));
         playMusic(station.getValue());
+        return station;
     }
 }

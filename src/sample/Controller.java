@@ -14,6 +14,7 @@ import javafx.util.Duration;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -102,7 +103,9 @@ public class Controller implements Initializable {
         });
         buttonRDS.setOnAction(event -> {
             if(radio.isTurnedOn()){
-                radioChannels.findNearestStation(radio.getActualFrequency());
+                Map.Entry<String, Double> station = radioChannels.findNearestStation(radio.getActualFrequency());
+                setActualTextOnLCD(station.getKey());
+                radio.setActualFrequency(station.getValue());
             }
         });
     }

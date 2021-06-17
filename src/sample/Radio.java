@@ -9,6 +9,7 @@ public class Radio {
     private double secondStation;
     private double thirdStation;
     private double fourthStation;
+
     public Radio(boolean turnedOn) {
         this.turnedOn = turnedOn;
         this.actualFrequency = MIN_FREQUENCY + 0.1;
@@ -31,11 +32,10 @@ public class Radio {
     }
 
     public void setActualFrequency(double actualFrequency) {
-       if(actualFrequency != MIN_FREQUENCY || actualFrequency != MAX_FREQUENCY)
+       if(actualFrequency != MIN_FREQUENCY && actualFrequency != MAX_FREQUENCY)
        {
-            this.actualFrequency = actualFrequency;
+           this.actualFrequency = actualFrequency;
        }
-
     }
 
     public double getFirstStation() {
