@@ -1,10 +1,5 @@
 package sample;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
 public class Radio {
     private boolean turnedOn;
     private double actualFrequency;
@@ -16,7 +11,11 @@ public class Radio {
     private double fourthStation;
     public Radio(boolean turnedOn) {
         this.turnedOn = turnedOn;
-        this.actualFrequency = MIN_FREQUENCY;
+        this.actualFrequency = MIN_FREQUENCY + 0.1;
+        this.firstStation = 88.9;
+        this.secondStation = 90.1;
+        this.thirdStation = 91.2;
+        this.fourthStation = 93.2;
     }
 
     public boolean isTurnedOn() {
@@ -32,7 +31,11 @@ public class Radio {
     }
 
     public void setActualFrequency(double actualFrequency) {
-        this.actualFrequency = actualFrequency;
+       if(actualFrequency != MIN_FREQUENCY || actualFrequency != MAX_FREQUENCY)
+       {
+            this.actualFrequency = actualFrequency;
+       }
+
     }
 
     public double getFirstStation() {

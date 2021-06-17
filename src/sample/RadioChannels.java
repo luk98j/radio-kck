@@ -2,12 +2,9 @@ package sample;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class RadioChannels {
     private MediaPlayer rockPlayer;
@@ -24,8 +21,16 @@ public class RadioChannels {
     private static final double CLASSIC_FM = 94.5;
     private static final double POP_FM = 96.4;
     private static final double TECHNO_FM = 99.4;
+    private HashMap<String,Double> stationsMap;
 
     public RadioChannels() {
+        stationsMap = new HashMap<>();
+        stationsMap.put("ROCK_FM",ROCK_FM);
+        stationsMap.put("JAZZ_FM",JAZZ_FM);
+        stationsMap.put("HIPHOP_FM",HIPHOP_FM);
+        stationsMap.put("CLASSIC_FM",CLASSIC_FM);
+        stationsMap.put("POP_FM",POP_FM);
+        stationsMap.put("TECHNO_FM",TECHNO_FM);
         String rock = "src/sample/sounds/ROCK_FM.mp3";     // For example
         Media sound = new Media(new File(rock).toURI().toString());
         this.rockPlayer = new MediaPlayer(sound);
@@ -76,6 +81,7 @@ public class RadioChannels {
         players.add(popPlayer);
         players.add(technoPlayer);
         players.add(radioTuningPlayer);
+        players.stream().forEach(mediaPlayer -> mediaPlayer.setVolume(0.5));
     }
 
     public String playMusic(double frequency){
@@ -106,7 +112,7 @@ public class RadioChannels {
         else {
             playChannel("RADIO_TUNING");
             stopPlaying();
-            return "";
+            return String.valueOf(frequency);
         }
     }
 
@@ -157,5 +163,35 @@ public class RadioChannels {
         } catch (NullPointerException e){
 
         }
+    }
+
+    public double getStationFrequency(String station){
+        stopAll();
+        if(stationsMap.containsKey(station)){
+            return stationsMap.get(station);
+        } else {
+            return Double.parseDouble(station);
+        }
+    }
+    public void volumeUp(){
+        for (MediaPlayer player: players) {
+            if(!player.equals(radioTuningPlayer) && player.getVolume() != 1){
+                player.setVolume(player.getVolume()+0.1);
+            }
+        }
+    }
+    public void volumeDown(){
+        for (MediaPlayer player: players) {
+            if(!player.equals(radioTuningPlayer) && player.getVolume() != 0){
+                player.setVolume(player.getVolume()-0.1);
+            }
+        }
+    }
+
+    public void findNearestStation(double frequency){
+        Map.Entry<String, Double> station = stationsMap.entrySet().stream()
+                .min(Comparator.comparingDouble(i -> Math.abs(i.getValue() - frequency)))
+                .orElseThrow(()-> new NoSuchElementException("No station"));
+        playMusic(station.getValue());
     }
 }

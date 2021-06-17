@@ -18,7 +18,7 @@
             <Button fx:id="buttonFavourite" layoutX="463.0" layoutY="129.0" mnemonicParsing="false" onAction="#addFavStation" text="FAV" />
             <Button fx:id="buttonRDS" layoutX="224.0" layoutY="129.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="RDS" />
             <TextField fx:id="screenLCD" layoutX="168.0" layoutY="36.0" prefHeight="55.0" prefWidth="333.0" />
-            <ImageView fx:id="knob" fitHeight="69.0" fitWidth="69.0" layoutX="62.0" layoutY="41.0" onRotate="#rotation" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="knob" fitHeight="70.0" fitWidth="70.0" layoutX="62.0" layoutY="41.0" onMouseClicked="#rotation" onRotate="#rotation" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@assets/b2.png" />
                </image>

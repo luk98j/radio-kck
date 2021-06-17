@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
@@ -16,7 +17,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
-    private static double actualFrequency;
     @FXML
     private ImageView knob;
     @FXML
@@ -43,8 +43,8 @@ public class Controller implements Initializable {
     private RadioChannels radioChannels;
     private Radio radio;
     private Rotate rotation = new Rotate();
-    private static final double pivotX = 162;
-    private static final double pivotY = 151;
+    private static final double pivotX = 35;
+    private static final double pivotY = 35;
     private boolean statusAddStations = false;
 
     @Override
@@ -53,54 +53,71 @@ public class Controller implements Initializable {
         radio = new Radio(false);
         rotation.setPivotX(pivotX);
         rotation.setPivotY(pivotY);
-        //knob.getTransforms().addAll(rotation);
+        rotation.setAngle(150);
+        knob.getTransforms().addAll(rotation);
+
         buttonChannelOne.setOnAction(event -> {
-            if(statusAddStations){
+            if (statusAddStations) {
                 radio.setFirstStation(radio.getActualFrequency());
+                setActualTextOnLCD("Correctly written");
                 statusAddStations = false;
             } else {
-                radioChannels.playMusic(radio.getFirstStation());
+                if(radio.isTurnedOn()) {
+                    setFavStation(radioChannels.playMusic(radio.getFirstStation()));
+                }
             }
         });
         buttonChannelTwo.setOnAction(event -> {
-            if(statusAddStations){
+            if (statusAddStations) {
                 radio.setSecondStation(radio.getActualFrequency());
+                setActualTextOnLCD("Correctly written");
                 statusAddStations = false;
             } else {
-                radioChannels.playMusic(radio.getSecondStation());
+                if(radio.isTurnedOn()) {
+                    setFavStation(radioChannels.playMusic(radio.getSecondStation()));
+                }
             }
         });
         buttonChannelThree.setOnAction(event -> {
-            if(statusAddStations){
+            if (statusAddStations) {
                 radio.setThirdStation(radio.getActualFrequency());
+                setActualTextOnLCD("Correctly written");
                 statusAddStations = false;
             } else {
-                radioChannels.playMusic(radio.getThirdStation());
+                if(radio.isTurnedOn()) {
+                    setFavStation(radioChannels.playMusic(radio.getThirdStation()));
+                }
             }
         });
         buttonChannelFour.setOnAction(event -> {
-            if(statusAddStations){
+            if (statusAddStations) {
                 radio.setFourthStation(radio.getActualFrequency());
+                setActualTextOnLCD("Correctly written");
                 statusAddStations = false;
             } else {
-                radioChannels.playMusic(radio.getFourthStation());
+                if(radio.isTurnedOn()) {
+                    setFavStation(radioChannels.playMusic(radio.getFourthStation()));
+                }
             }
         });
-
+        buttonRDS.setOnAction(event -> {
+            if(radio.isTurnedOn()){
+                radioChannels.findNearestStation(radio.getActualFrequency());
+            }
+        });
     }
     public void rotation(MouseEvent event) {
-        System.out.println(rotation.getAngle());
-//        if (event.getButton().toString().equals(PRIMARY_VALUE)) {
-//            if(rotation.getAngle() != 300.0) {
-//                System.out.println("LEWY");
-//                rotation.setAngle(rotation.getAngle() + 15);
-//            }
-//        } else if (event.getButton().toString().equals(SECONDARY_VALUE)) {
-//            if(rotation.getAngle() != 0.0) {
-//                System.out.println("PRAWY");
-//                rotation.setAngle(rotation.getAngle() - 15);
-//            }
-//        }
+        if (event.getButton().equals(MouseButton.PRIMARY)) {
+            if(rotation.getAngle() != 300.0) {
+                radioChannels.volumeUp();
+                rotation.setAngle(rotation.getAngle() + 15);
+            }
+        } else if (event.getButton().equals(MouseButton.SECONDARY)) {
+            if(rotation.getAngle() != 0.0) {
+                radioChannels.volumeDown();
+                rotation.setAngle(rotation.getAngle() - 15);
+            }
+        }
     }
 
     public void changeRadioState(){
@@ -113,11 +130,56 @@ public class Controller implements Initializable {
             radio.setTurnedOn(true);
             setActualTextOnLCD("TURN ON");
             openActualChannel();
+
         }
+    }
+
+
+    public void setFrequencyUp(){
+        if(radio.isTurnedOn()) {
+            BigDecimal bd = new BigDecimal(Double.sum(radio.getActualFrequency(), 0.1)).setScale(1, RoundingMode.HALF_EVEN);
+            radio.setActualFrequency(bd.doubleValue());
+            setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
+            checkStation();
+        }
+    }
+
+    public void setFrequencyDown(){
+        if(radio.isTurnedOn()) {
+            BigDecimal bd = new BigDecimal(radio.getActualFrequency() - 0.1).setScale(1, RoundingMode.HALF_EVEN);
+            radio.setActualFrequency(bd.doubleValue());
+            setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
+            checkStation();
+        }
+    }
+
+    public void addFavStation(){
+        if(radio.isTurnedOn()) {
+            statusAddStations = true;
+            String tempText = screenLCD.getText();
+            System.out.println(tempText);
+            actionOnDelay("Store stations", 1);
+            setActualTextOnLCD(tempText);
+        }
+    }
+
+    private void checkStation(){
+        String channel = radioChannels.playMusic(radio.getActualFrequency());
+        if(!channel.isEmpty()){
+            setActualTextOnLCD(channel);
+        }
+    }
+
+    private void setFavStation(String nameOfStation){
+        double frequency = radioChannels.getStationFrequency(nameOfStation);
+        radio.setActualFrequency(frequency);
+        setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
+        checkStation();
     }
 
     private void openActualChannel(){
         actionOnDelay(Double.toString(radio.getActualFrequency()),2);
+        radioChannels.playMusic(radio.getActualFrequency());
     }
     private void closedActualChannel(){
         actionOnDelay("",2);
@@ -132,37 +194,4 @@ public class Controller implements Initializable {
         pause.setOnFinished(event -> setActualTextOnLCD(text));
         pause.play();
     }
-
-    public void setFrequencyUp(){
-        if(radio.isTurnedOn()) {
-            BigDecimal bd = new BigDecimal(Double.sum(radio.getActualFrequency(), 0.1)).setScale(1, RoundingMode.HALF_EVEN);
-            radio.setActualFrequency(bd.doubleValue());
-            setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
-            checkStation();
-        }
-    }
-    public void setFrequencyDown(){
-        if(radio.isTurnedOn()) {
-            BigDecimal bd = new BigDecimal(radio.getActualFrequency() - 0.1).setScale(1, RoundingMode.HALF_EVEN);
-            radio.setActualFrequency(bd.doubleValue());
-            setActualTextOnLCD(Double.toString(radio.getActualFrequency()));
-            checkStation();
-        }
-    }
-
-    public void addFavStation(){
-        String tempText = screenLCD.getText();
-        System.out.println(tempText);
-        statusAddStations = true;
-        actionOnDelay("Store stations",2);
-        screenLCD.setText(tempText);
-    }
-
-    private void checkStation(){
-        String channel = radioChannels.playMusic(radio.getActualFrequency());
-        if(!channel.isEmpty()){
-            setActualTextOnLCD(channel);
-        }
-    }
-
 }
